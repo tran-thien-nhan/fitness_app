@@ -7,6 +7,8 @@ function ProjectileMotionCalculator() {
     const [freeFallResult, setFreeFallResult] = useState(null);
     const [initialHeightProjectileMotion, setInitialHeightProjectileMotion] = useState(0);
     const [initialHeight, setInitialHeight] = useState(0);
+    const [weight, setWeight] = useState(0);
+    const [freeweight, setFreeWeight] = useState(0);
 
     useEffect(() => {
         const calculateProjectileMotion = () => {
@@ -17,29 +19,43 @@ function ProjectileMotionCalculator() {
 
             // Tính chuyển động theo chiều dọc
             const y0 = parseFloat(initialHeightProjectileMotion); // vị trí ban đầu theo chiều dọc
+
+            // Tính gia tốc do trọng lượng
+            const gWithWeight = g * (weight / 1000); // Chuyển trọng lượng từ gram sang kilogram và nhân với gia tốc rơi tự do
+
+            // Tính chuyển động theo chiều dọc
             const v0y = initialVelocity * Math.sin(theta);
-            const t = (v0y + Math.sqrt(v0y ** 2 + 2 * g * y0)) / g;
-            const y = y0 + v0y * t - (1 / 2) * g * t ** 2;
+            const t = (v0y + Math.sqrt(v0y ** 2 + 2 * gWithWeight * y0)) / gWithWeight;
+            const y = y0 + v0y * t - (1 / 2) * gWithWeight * t ** 2;
 
             // Tính chuyển động theo chiều ngang
             const v0x = initialVelocity * Math.cos(theta);
             const x = v0x * t;
 
+            // Kiểm tra giá trị của biến launchAngle
+            if (launchAngle < 0 || launchAngle > 90) {
+                throw new Error("Góc ném phải nằm trong khoảng từ 0 đến 90 độ");
+            }
+
             // Đặt kết quả
             setResult({
                 time: t.toFixed(2),
                 distance: x.toFixed(2),
+                verticalPosition: y.toFixed(2),
             });
         };
 
         const calculateFreeFall = () => {
             const g = 9.8; // gia tốc rơi tự do
 
+            // Tính gia tốc do trọng lượng
+            const gWithWeight = g * (freeweight / 1000); // Chuyển trọng lượng từ gram sang kilogram và nhân với gia tốc rơi tự do
+
             // Tính thời gian rơi tự do
-            const freeFallTime = Math.sqrt((2 * initialHeight) / g);
+            const freeFallTime = Math.sqrt((2 * initialHeight) / gWithWeight);
 
             // Tính vị trí theo chiều dọc khi rơi tự do
-            const freeFallVerticalPosition = (1 / 2) * g * freeFallTime ** 2;
+            const freeFallVerticalPosition = (1 / 2) * gWithWeight * freeFallTime ** 2;
 
             // Đặt kết quả
             setFreeFallResult({
@@ -48,9 +64,10 @@ function ProjectileMotionCalculator() {
             });
         };
 
+
         calculateProjectileMotion();
         calculateFreeFall();
-    }, [initialVelocity, launchAngle, initialHeight, initialHeightProjectileMotion]);
+    }, [initialVelocity, launchAngle, initialHeight, initialHeightProjectileMotion, weight, freeweight]);
 
     return (
         <>
@@ -90,6 +107,17 @@ function ProjectileMotionCalculator() {
                             />
                         </label>
                     </div>
+                    <div className="form-group my-2">
+                        <label>
+                            khối lượng vật (kg):
+                            <input
+                                type="number"
+                                className="form-control"
+                                value={weight}
+                                onChange={(e) => setWeight(e.target.value)}
+                            />
+                        </label>
+                    </div>
                     {result && (
                         <div className="my-4" style={{ border: '1px solid white', padding: '10px', width: 'fit-content', margin: '0 auto' }}>
                             <h3>Kết quả:</h3>
@@ -112,11 +140,21 @@ function ProjectileMotionCalculator() {
                                 />
                             </label>
                         </div>
+                        <div className="form-group my-2">
+                            <label>
+                                khối lượng vật (kg):
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    value={freeweight}
+                                    onChange={(e) => setFreeWeight(e.target.value)}
+                                />
+                            </label>
+                        </div>
                         {freeFallResult && (
                             <div className="my-4" style={{ border: '1px solid white', padding: '10px', width: 'fit-content', margin: '0 auto' }}>
                                 <h3>Kết quả rơi tự do:</h3>
                                 <p>Thời gian rơi tự do: {freeFallResult.freeFallTime} giây</p>
-                                <p>Vị trí theo chiều dọc khi rơi tự do: {freeFallResult.freeFallVerticalPosition} mét</p>
                             </div>
                         )}
                     </div>
