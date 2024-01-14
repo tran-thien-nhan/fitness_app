@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/tran-thien-nhan/fitness_app/static/css/main.f855e6bc.css",
+    "main.js": "/tran-thien-nhan/fitness_app/static/js/main.e61e5d41.js",
+    "static/js/787.87ed01ba.chunk.js": "/tran-thien-nhan/fitness_app/static/js/787.87ed01ba.chunk.js",
+    "static/media/logo.svg": "/tran-thien-nhan/fitness_app/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/tran-thien-nhan/fitness_app/index.html",
+    "main.f855e6bc.css.map": "/tran-thien-nhan/fitness_app/static/css/main.f855e6bc.css.map",
+    "main.e61e5d41.js.map": "/tran-thien-nhan/fitness_app/static/js/main.e61e5d41.js.map",
+    "787.87ed01ba.chunk.js.map": "/tran-thien-nhan/fitness_app/static/js/787.87ed01ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.e61e5d41.js"
+  ]
+}
